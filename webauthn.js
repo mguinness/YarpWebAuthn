@@ -41,7 +41,7 @@ async function existingKey() {
         if (json.error == 'not_configured') {
             window.command.innerHTML = 'No credentials configured on server for ' + window.location.hostname
         }
-    } catch(e) {
+    } catch (e) {
         console.log(e);
     }
 }

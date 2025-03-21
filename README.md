@@ -17,7 +17,7 @@ A wildcard certificate is helpful as you only need one certificate to cover mult
 
 You can use a Docker image to generate the certificates using [Let's Encrypt for Duck DNS](https://hub.docker.com/r/maksimstojkovic/letsencrypt).
 
-Once the certifcates are generated you will need the files `fullchain.pem` and `privkey.pem` for the configuration below.
+Once the certificates are generated you will need the files `fullchain.pem` and `privkey.pem` for the configuration below.
 
 ## Getting Started
 Modify `appsettings.json` file changing the lines marked with `+` to match your configuration.
