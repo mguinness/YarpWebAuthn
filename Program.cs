@@ -4,9 +4,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddMemoryCache();
 
-var dataProtectionProvider = DataProtectionProvider.Create("yarpwebauthn");
+builder.Configuration.AddJsonFile("config/customsettings.json", false, true);
 
-var dataProtector = dataProtectionProvider.CreateProtector("securecookie")
+builder.Services.Configure<Hosts>(builder.Configuration.GetSection("Hosts"));
+
+var dataProtector = DataProtectionProvider.Create("yarpwebauthn")
+    .CreateProtector("securecookie")
     .ToTimeLimitedDataProtector();
 
 builder.Services.AddAuthentication("TokenAuthentication")
@@ -25,6 +28,6 @@ app.UseAuthorization();
 
 app.MapReverseProxy();
 
-app.RegisterAuthEndpoints(builder.Configuration.GetSection("Hosts"), dataProtector);
+app.RegisterAuthEndpoints(dataProtector);
 
-app.Run("https://*:443");
+app.Run("https://*:8443");

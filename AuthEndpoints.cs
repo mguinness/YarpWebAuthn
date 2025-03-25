@@ -1,16 +1,17 @@
 ﻿using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
 using System.Net.Mime;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 
+internal class Hosts : Dictionary<string, Dictionary<string, string>>;
+
 public static class AuthEndpoints
 {
-    public static void RegisterAuthEndpoints(this WebApplication app, IConfigurationSection section, ITimeLimitedDataProtector protector)
+    public static void RegisterAuthEndpoints(this WebApplication app, ITimeLimitedDataProtector protector)
     {
-        var hosts = section.Get<Dictionary<string, Dictionary<string, string>>>() ?? [];
-
         var dataProtector = protector;
 
         var auth = app.MapGroup("auth");
@@ -69,11 +70,11 @@ public static class AuthEndpoints
             return Results.Json(publicKey);
         });
 
-        auth.MapPost("existingkey", (HttpContext ctx, IMemoryCache cache) =>
+        auth.MapPost("existingkey", (HttpContext ctx, IMemoryCache cache, IOptionsMonitor<Hosts> hosts) =>
         {
             var origin = new Uri(ctx.Request.Headers.Origin);
 
-            if (!hosts.TryGetValue(origin.Host, out var creds))
+            if (!hosts.CurrentValue.TryGetValue(origin.Host, out var creds) || creds.Count == 0)
             {
                 return Results.Json(new { error = "not_configured" });
             }
@@ -92,7 +93,7 @@ public static class AuthEndpoints
             return Results.Json(publicKey);
         });
 
-        auth.MapPost("validatekey", (JsonElement data, HttpContext ctx, IMemoryCache cache) =>
+        auth.MapPost("validatekey", (JsonElement data, HttpContext ctx, IMemoryCache cache, IOptionsMonitor<Hosts> hosts) =>
         {
             var origin = new Uri(ctx.Request.Headers.Origin);
 
@@ -102,7 +103,7 @@ public static class AuthEndpoints
             string clientDataJSON = data.GetProperty("clientDataJSON").GetString();
             var dataToVerify = GenerateComparison(authenticatorData, clientDataJSON);
 
-            hosts.TryGetValue(origin.Host, out var host);
+            hosts.CurrentValue.TryGetValue(origin.Host, out var host);
 
             if (host.TryGetValue(data.GetProperty("id").GetString(), out var publicKey) &&
                 IsDataValid(clientDataJSON, challenge.TrimEnd('='), origin.AbsoluteUri.TrimEnd('/')) &&

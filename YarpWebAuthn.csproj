@@ -7,6 +7,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ContainerEnvironmentVariable Include="APP_UID" Value="0" />
+    <ContainerEnvironmentVariable Include="ASPNETCORE_HTTP_PORTS" Value="" />
+    <ContainerEnvironmentVariable Include="ASPNETCORE_HTTPS_PORTS" Value="8443" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="webauthn.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Yarp.ReverseProxy" Version="2.3.0" />
   </ItemGroup>
 

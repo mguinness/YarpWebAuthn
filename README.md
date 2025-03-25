@@ -15,7 +15,9 @@ If you have a home server and you want to protect websites behind a reverse prox
 
 A wildcard certificate is helpful as you only need one certificate to cover multiple subdomains, i.e. app1.example.duckdns.org, app2.example.duckdns.org etc.
 
-You can use a Docker image to generate the certificates using [Let's Encrypt for Duck DNS](https://hub.docker.com/r/maksimstojkovic/letsencrypt).
+Docker images are available in Docker Hub at [mguinness/yarpwebauthn](https://hub.docker.com/r/mguinness/yarpwebauthn).  See the overview at the registry for futher details, including an example [docker compose](https://docs.docker.com/reference/cli/docker/compose/) configuration file.
+
+You can use a Docker image to generate the certificates using [Let's Encrypt for Duck DNS](https://hub.docker.com/r/maksimstojkovic/letsencrypt).  This uses [DNS challenge](https://letsencrypt.org/docs/challenge-types/#dns-01-challenge) against a TXT record and avoids using http.
 
 Once the certificates are generated you will need the files `fullchain.pem` and `privkey.pem` for the configuration below.
 
@@ -65,7 +67,7 @@ Run the ASP.NET Core application and navigate to https://www.example.duckdns.org
 
 After the final prompt you will get a message that includes the public key.  Copy and paste it into the `Hosts` section in the appsettings.json file.  You can have multiple security keys per host, repeat the process as necessary.
 
-After restarting the application and navigating to the website you should be automatically redirected to `/auth/login` where you should be prompted to insert your security key to authenticate.
+Return to the browser and enter https://www.example.duckdns.org/ again, that should automatically redirect to `/auth/login` and you should be prompted to insert your security key to authenticate.
 
 ![Screenshot](login.gif)
 
