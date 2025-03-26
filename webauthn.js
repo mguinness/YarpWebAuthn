@@ -18,7 +18,7 @@ async function registerkey() {
         window.command.innerHTML = 'On your server, save this key in appsettings under hosts section:<br /><pre>"' + window.location.hostname +
             '": {<br />&nbsp;&nbsp;"' + barraytoa(cred.rawId) + '": "' + barraytoa(cred.response.getPublicKey()) + '"<br />}</pre>'
     } catch (e) {
-        console.log(e)
+        console.log(e);
     }
 }
 

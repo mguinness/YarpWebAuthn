@@ -22,7 +22,7 @@ You can use a Docker image to generate the certificates using [Let's Encrypt for
 Once the certificates are generated you will need the files `fullchain.pem` and `privkey.pem` for the configuration below.
 
 ## Getting Started
-Modify `appsettings.json` file changing the lines marked with `+` to match your configuration.
+Modify `customsettings.json` file changing the lines marked with `+` to match your configuration.
 
 ```diff
 "Kestrel": {
@@ -65,7 +65,7 @@ Run the ASP.NET Core application and navigate to https://www.example.duckdns.org
 
 ![Screenshot](register.gif)
 
-After the final prompt you will get a message that includes the public key.  Copy and paste it into the `Hosts` section in the appsettings.json file.  You can have multiple security keys per host, repeat the process as necessary.
+After the final prompt you will get a message that includes the public key.  Copy and paste it into the `Hosts` section in the customsettings.json file.  You can have multiple security keys per host, repeat the process as necessary.
 
 Return to the browser and enter https://www.example.duckdns.org/ again, that should automatically redirect to `/auth/login` and you should be prompted to insert your security key to authenticate.
 

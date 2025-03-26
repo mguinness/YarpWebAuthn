@@ -10,10 +10,8 @@ internal class Hosts : Dictionary<string, Dictionary<string, string>>;
 
 public static class AuthEndpoints
 {
-    public static void RegisterAuthEndpoints(this WebApplication app, ITimeLimitedDataProtector protector)
+    public static void RegisterAuthEndpoints(this WebApplication app, ITimeLimitedDataProtector dataProtector)
     {
-        var dataProtector = protector;
-
         var auth = app.MapGroup("auth");
 
         auth.MapGet("webauthn.js", () =>
